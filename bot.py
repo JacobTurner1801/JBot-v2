@@ -1,21 +1,19 @@
 import discord
 from discord.ext import commands
-import os
 TOKEN = open("token.txt", "r").read()
 SERVER_ID = 394868206545797130
 
 client = discord.Client()
-
 commands_usable = """```py
 def commands():
     YEE = usable
     X = not usable
     ADMIN = only Jacob
     return {
-        YEE - jbot.commands(): 'returns the commands'
-        YEE - jbot.hello(): 'says hello'
-        ADMIN - jbot.logout(): 'disconnects the bot'
-        X - jbot.search(): 'googles what you put after'
+        YEE - !commands: 'returns the commands'
+        YEE - !hello: 'says hello'
+        ADMIN - !logout: 'disconnects the bot'
+        X - !search: 'googles what you put after'
     } ```"""
 
 
@@ -35,15 +33,15 @@ async def on_message(message):
 
 async def return_message(message):
     m = message.content.lower()
-    if check_command("jbot.commands()", m):
+    if check_command("!commands", m):
         await message.channel.send(commands_usable)
-    elif check_command("jbot.hello()", m):
+    elif check_command("!hello", m):
         await message.channel.send("Hello")
-    elif check_command("jbot.logout()", m):
+    elif check_command("!logout", m):
         await message.channel.send("Bye then")
         await client.close()
-    elif not check_command("jbot.logout()", m):
-        await message.channel.send("Only Jacob can close me down!")
+        if not check_command("!logout", m):
+            await message.channel.send("Only Jacob can close me down!")
 # end return_message
 
 
