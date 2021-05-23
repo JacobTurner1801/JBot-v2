@@ -1,5 +1,5 @@
 import discord
-from discord.ext import commands
+from googlesearch import search
 TOKEN = open("token.txt", "r").read()
 SERVER_ID = 394868206545797130
 
@@ -12,8 +12,8 @@ def commands():
     return {
         YEE - !commands: 'returns the commands'
         YEE - !hello: 'says hello'
+        YEE - !search: 'googles what you put after'
         ADMIN - !logout: 'disconnects the bot'
-        X - !search: 'googles what you put after'
     } ```"""
 
 
@@ -37,6 +37,10 @@ async def return_message(message):
         await message.channel.send(commands_usable)
     elif check_command("!hello", m):
         await message.channel.send("Hello")
+    elif check_command("!search", m):
+        res = await google_search(m)
+        for i in range(len(res)):
+            await message.channel.send(str(res[i]))
     elif check_command("!logout", m):
         await message.channel.send("Bye then")
         await client.close()
@@ -45,8 +49,17 @@ async def return_message(message):
 # end return_message
 
 
-def check_command(command, m):
-    if command == m:
+async def google_search(message) -> list:
+    m = message.split()
+    query = m[1]  # get the query to google
+    res = []
+    for i in search(query=query, num=5, start=0, stop=10, pause=1):  # shows first 5 results
+        res.append(i)
+    return res
+
+
+def check_command(command, m) -> bool:
+    if command == m or command in m:
         return True
     else:
         return False
